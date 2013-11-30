@@ -81,9 +81,19 @@ void Grafica::Pantalla::dibujar()
 /**
  * texto
  */
+Grafica::Texto::Texto(char* texto):Grafica::Dibujable()
+{
+	_texto = texto;
+};
+
+Grafica::Texto::~Texto()
+{
+	delete[] _texto;
+}
+
 void Grafica::Texto::dibujar()
 {
-	// Dibujar texto
+	outtextxy(getX(), getY(), _texto);
 };
 
 /**

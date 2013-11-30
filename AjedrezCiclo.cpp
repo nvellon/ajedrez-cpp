@@ -5,7 +5,7 @@ Ajedrez::Ciclo::Ciclo()
 	_finalizo = false;
 	_pantalla = new Grafica::Pantalla("Ajedrez - Grupo 6", 800, 600);
 	
-	Ajedrez::Tablero* tablero = new Ajedrez::Tablero();
+	Ajedrez::Tablero* tablero = new Ajedrez::Tablero(50, 40);
 	_pantalla->agregar(tablero);
 }
 

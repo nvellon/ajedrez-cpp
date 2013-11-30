@@ -1,58 +1,55 @@
 #include "Ajedrez.h"
 
-Ajedrez::Tablero::Tablero()
+Ajedrez::Tablero::Tablero(int x, int y)
 {
-	_anchoCelda = 0;
-	_largoCelda = 0;
-	_x = 0;
-	_y = 0;
+	_x = x;
+	_y = y;
 
 	crearGrilla();
-	crearRotulos();
 }
 
 Ajedrez::Tablero::~Tablero()
 {
-	// Nada para hacer
+	delete _grilla;
 }
 
 void Ajedrez::Tablero::crearGrilla()
 {
-	Grafica::Imagen* fondo = new Grafica::Imagen("img\\tablero_gris.gif", 470, 470);
+	_grilla = new Grafica::Imagen("img\\tablero_gris.gif", GRILLA_IMAGEN_ANCHO, GRILLA_IMAGEN_ALTO);
 	
-	fondo->setX(50);
-	fondo->setY(60);
+	_grilla->setX(_x + SEPARACION_TABLERO_ROTULO_ANCHO);
+	_grilla->setY(_y + SEPARACION_TABLERO_ROTULO_ALTO);
 
-	agregar(fondo);
+	agregar(_grilla);
 }
 
-void Ajedrez::Tablero::crearGrilla()
+void Ajedrez::Tablero::dibujarRotulos()
 {
-	char* rotuloX = new char[2];
-	rotuloX[0] = '1';
-	rotuloX[1] = '\0';
+	int x = _x  + SEPARACION_TABLERO_ROTULO_ANCHO + (GRILLA_IMAGEN_ANCHO_CELDA / 2);
+	int y = _y + (SEPARACION_TABLERO_ROTULO_ALTO - 5) + (GRILLA_IMAGEN_ALTO_CELDA / 2);
 
-	char* rotuloY = new char[2];
-	rotuloY[0] = 'A';
-	rotuloY[1] = '\0';
+	char* textoX = new char[2];
+    textoX[0] = '1';
+    textoX[1] = '\0';
 
-	int xIni = getXInicial(wWidth) - (_anchoCelda / 2);
-	int yIni = getYInicial(wHeight) - (_largoCelda / 2);
-
-	int x = xIni + _anchoCelda;
-	int y = yIni + _largoCelda;
+    char* textoY = new char[2];
+    textoY[0] = 'A';
+    textoY[1] = '\0';
 
 	for (int i = 0; i < CELDAS_POR_LADO; i++)
 	{
-		outtextxy(x, yIni, &_rotuloX[0]);
-		outtextxy(xIni, y, &_rotuloY[0]);
+		outtextxy(x, _y, &textoX[0]);
+		outtextxy(_x, y, &textoY[0]);
 
-		_rotuloX[0]++;
-		_rotuloY[0]++;
+		x += GRILLA_IMAGEN_ANCHO_CELDA;
+		y += GRILLA_IMAGEN_ALTO_CELDA;
 
-		x += _anchoCelda;
-		y += _largoCelda;
+		textoX[0]++;
+		textoY[0]++;
 	}
+
+	delete[] textoX;
+	delete[] textoY;
 }
 
 void Ajedrez::Tablero::setX(int x)
@@ -75,12 +72,9 @@ int Ajedrez::Tablero::getY()
 	return _x;
 }
 
-int Ajedrez::Tablero::getXInicial(int wWidth)
+void Ajedrez::Tablero::dibujar()
 {
-	return (wWidth / 2) - ((CELDAS_POR_LADO * _anchoCelda) / 2);
-}
+	dibujarRotulos();
 
-int Ajedrez::Tablero::getYInicial(int wHeight)
-{
-	return (wHeight / 2) - ((CELDAS_POR_LADO * _largoCelda) / 2);
+	Grafica::Composicion::dibujar();
 }

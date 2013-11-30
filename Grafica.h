@@ -25,6 +25,7 @@ class Grafica::Dibujable
 private:
 	int _x;
 	int _y;
+
 public:
 	Dibujable();
 	void setX(int x);
@@ -41,6 +42,7 @@ class Grafica::Composicion:public Grafica::Dibujable
 {
 protected:
 	vector<Grafica::Dibujable*> _componente;
+
 public:
 	Composicion();
 	~Composicion();
@@ -58,6 +60,7 @@ private:
 	char* _titulo;
 	int _ancho;
 	int _alto;
+
 public:
 	Pantalla(char* titulo, int ancho, int alto);
 	void dibujar();
@@ -68,7 +71,12 @@ public:
  */
 class Grafica::Texto:public Grafica::Dibujable
 {
+protected:
+	char* _texto;
+
 public:
+	Texto(char* texto);
+	~Texto();
 	void dibujar();
 };
 
@@ -81,6 +89,7 @@ private:
 	char* _rutaImagen;
 	int _ancho;
 	int _alto;
+
 public:
 	Imagen(char* rutaImagen, int ancho, int alto);
 	void setRutaImagen(char* rutaImagen, int ancho, int alto);
