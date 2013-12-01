@@ -26,17 +26,29 @@ public:
 };
 
 
-class Juego::Pieza
+class Juego::Equipo
 {
 protected:
-	char _color;
-	char _icono;
-	bool _puedeSaltar;
+	char* _nombre;
+
+public:
+	Equipo(char* nombre);
+	~Equipo();
+};
+
+
+class Juego::Pieza:public Grafica::Imagen
+{
+protected:
+	char* _icono;
+	Juego::Equipo* _equipo;
+
 public:
 	Pieza();
 	virtual ~Pieza();
-	void setIcono(char icono);
-	char getIcono();
+	void setEquipo(Juego::Equipo* equipo);
+	Juego::Equipo* getEquipo();
+	virtual char* getIcono()=0;
 	virtual char getTipoPieza()=0;
 	virtual void mover()=0;
 	virtual bool movimientoValido()=0;

@@ -14,7 +14,8 @@ namespace Grafica
 	class Pantalla;
 	class Imagen;
 	class Texto;
-	class Forma;
+	class Linea;
+	class Rectangulo;
 };
 
 /**
@@ -28,6 +29,7 @@ private:
 
 public:
 	Dibujable();
+	~Dibujable();
 	void setX(int x);
 	int getX();
 	void setY(int y);
@@ -63,6 +65,7 @@ private:
 
 public:
 	Pantalla(char* titulo, int ancho, int alto);
+	void mostrarPosMouse(bool mostrar);
 	void dibujar();
 };
 
@@ -91,17 +94,47 @@ private:
 	int _alto;
 
 public:
+	Imagen();
 	Imagen(char* rutaImagen, int ancho, int alto);
 	void setRutaImagen(char* rutaImagen, int ancho, int alto);
 	char* getRutaImagen();
+	void setAncho(int ancho);
+	void setAlto(int alto);
 	void dibujar();
 };
 
 /**
- * Forma
+ * Linea
  */
-class Grafica::Forma:public Grafica::Dibujable
+class Grafica::Linea:public Grafica::Dibujable
 {
+private: 
+	int _x2;
+	int _y2;
+
 public:
+	Linea(int x1, int y1, int x2, int y2);
+	void dibujar();
+};
+
+/**
+ * Rectangulo
+ */
+class Grafica::Rectangulo:public Grafica::Dibujable
+{
+private: 
+	int _x2;
+	int _y2;
+	int _tipoRelleno;
+	int _colorRelleno;
+	int _anchoLinea;
+	int _3d;
+
+public:
+	Rectangulo(int x1, int y1, int x2, int y2);
+	void setTipoRelleno(int tipo);
+	void setColorRelleno(int color);
+	void setAnchoLinea(int pixels);
+	void set3d(bool enabled);
 	void dibujar();
 };

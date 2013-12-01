@@ -2,8 +2,8 @@
 
 Ajedrez::Tablero::Tablero(int x, int y)
 {
-	_x = x;
-	_y = y;
+	setX(x);
+	setY(y);
 
 	crearGrilla();
 }
@@ -17,14 +17,17 @@ void Ajedrez::Tablero::crearGrilla()
 {
 	_grilla = new Grafica::Imagen("img\\tablero_gris.gif", GRILLA_IMAGEN_ANCHO, GRILLA_IMAGEN_ALTO);
 	
-	_grilla->setX(_x + SEPARACION_TABLERO_ROTULO_ANCHO);
-	_grilla->setY(_y + SEPARACION_TABLERO_ROTULO_ALTO);
+	_grilla->setX(getX() + SEPARACION_TABLERO_ROTULO_ANCHO);
+	_grilla->setY(getY() + SEPARACION_TABLERO_ROTULO_ALTO);
 
 	agregar(_grilla);
 }
 
 void Ajedrez::Tablero::dibujarRotulos()
 {
+	int _x = getX();
+	int _y = getY();
+
 	int x = _x  + SEPARACION_TABLERO_ROTULO_ANCHO + (GRILLA_IMAGEN_ANCHO_CELDA / 2);
 	int y = _y + (SEPARACION_TABLERO_ROTULO_ALTO - 5) + (GRILLA_IMAGEN_ALTO_CELDA / 2);
 
@@ -50,26 +53,6 @@ void Ajedrez::Tablero::dibujarRotulos()
 
 	delete[] textoX;
 	delete[] textoY;
-}
-
-void Ajedrez::Tablero::setX(int x)
-{
-	_x = x;
-}
-
-int Ajedrez::Tablero::getX()
-{
-	return _x;
-}
-
-void Ajedrez::Tablero::setY(int x)
-{
-	_x = x;
-}
-
-int Ajedrez::Tablero::getY()
-{
-	return _x;
 }
 
 void Ajedrez::Tablero::dibujar()

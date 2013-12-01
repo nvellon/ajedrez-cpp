@@ -9,6 +9,11 @@ Grafica::Dibujable::Dibujable()
 	_y = 0;
 };
 
+Grafica::Dibujable::~Dibujable()
+{
+	//
+};
+
 void Grafica::Dibujable::setX(int x)
 {
 	_x = x;
@@ -32,7 +37,7 @@ int Grafica::Dibujable::getY()
 /**
  * Composicion
  */
-Grafica::Composicion::Composicion()
+Grafica::Composicion::Composicion():Grafica::Dibujable()
 {
 	// Nada que hacer
 };
@@ -71,6 +76,22 @@ Grafica::Pantalla::Pantalla(char* titulo, int ancho, int alto):Grafica::Composic
 	_alto = alto;
 }
 
+void Grafica::Pantalla::mostrarPosMouse(bool mostrar) 
+{
+	if (mostrar) {
+		char buffer[20] = "";
+
+		setcolor(15);
+		settextstyle(0, 0, 0);
+		outtextxy(0,  0, "X =       ");
+		outtextxy(0, 14, "Y =       ");
+		itoa(mousex(), buffer, 10); // mousex() nos devuelve la posicion x actual del mouse.
+		outtextxy(35, 0, buffer);
+		itoa(mousey(), buffer, 10); // mousey() nos devuelve la posicion y actual del mouse.
+		outtextxy(35, 14, buffer);
+	}
+}
+
 void Grafica::Pantalla::dibujar()
 {
 	initwindow(_ancho, _alto, _titulo);
@@ -99,6 +120,11 @@ void Grafica::Texto::dibujar()
 /**
  * Imagen
  */
+Grafica::Imagen::Imagen():Grafica::Dibujable()
+{
+	setRutaImagen("", 0, 0);
+};
+
 Grafica::Imagen::Imagen(char* rutaImagen, int ancho, int alto):Grafica::Dibujable()
 {
 	setRutaImagen(rutaImagen, ancho, alto);
@@ -116,15 +142,87 @@ char* Grafica::Imagen::getRutaImagen()
 	return _rutaImagen;
 };
 
+void Grafica::Imagen::setAncho(int ancho)
+{
+	_ancho = ancho;
+}
+
+void Grafica::Imagen::setAlto(int alto)
+{
+	_alto = alto;
+}
+
 void Grafica::Imagen::dibujar()
 {
 	readimagefile(_rutaImagen, getX(), getY(), getX() + _ancho, getY() + _alto);
 };
 
 /**
- * Forma
+ * Linea
  */
-void Grafica::Forma::dibujar()
+Grafica::Linea::Linea(int x1, int y1, int x2, int y2)
 {
-	// Dibujar forma
+	setX(x1);
+	setY(y1);
+	_x2 = x2;
+	_y2 = y2;
 };
+
+void Grafica::Linea::dibujar()
+{
+	line(getX(), getY(), _x2, _y2);
+};
+
+/**
+ * Rectangulo
+ */
+Grafica::Rectangulo::Rectangulo(int x1, int y1, int x2, int y2)
+{
+	setX(x1);
+	setY(y1);
+	_x2 = x2;
+	_y2 = y2;
+
+	_anchoLinea = NULL;
+	_colorRelleno = NULL;
+	_tipoRelleno = NULL;
+	_3d = false;
+}
+
+void Grafica::Rectangulo::setTipoRelleno(int tipo)
+{
+	_tipoRelleno = tipo;
+}
+
+void Grafica::Rectangulo::setColorRelleno(int color)
+{
+	_colorRelleno = color;
+}
+
+void Grafica::Rectangulo::setAnchoLinea(int pixels)
+{
+	_anchoLinea = pixels;
+}
+
+void Grafica::Rectangulo::set3d(bool enabled)
+{
+	_3d = enabled;
+}
+
+void Grafica::Rectangulo::dibujar()
+{
+	if (_anchoLinea != NULL)
+		setlinestyle(SOLID_LINE, 0, _anchoLinea);
+
+	if (_colorRelleno != NULL && _tipoRelleno != NULL)
+		setfillstyle(_tipoRelleno, _colorRelleno);
+
+	if (_3d)
+	{
+		bar3d(getX(), getY(), _x2, _y2, 10, 0);
+	}
+	else
+	{
+		bar(getX(), getY(), _x2, _y2);
+	}
+}
