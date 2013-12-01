@@ -11,19 +11,13 @@ Ajedrez::Ciclo::Ciclo()
 	
 	_tablero = new Ajedrez::Tablero(30, 40);
 
+	// Negras
 	_equipoNegro = new Ajedrez::Equipo("Negras");
-	_equipoNegro->setColor(Ajedrez::EQUIPO_NEGRO);
+	inicarEquipo(_equipoNegro, Ajedrez::EQUIPO_NEGRO);
 
-	for (int i = 0; i < Ajedrez::CANTIDAD_PEON; i++)
-	{
-		_pieza[i] = new Ajedrez::Peon();
-		_pieza[i]->setEquipo(_equipoNegro);
-
-		_tablero->agregarPieza(_pieza[i]);
-	}
-
+	// Blancas
 	_equipoBlanco = new Ajedrez::Equipo("Blancas");
-	_equipoBlanco->setColor(Ajedrez::EQUIPO_BLANCO);
+	inicarEquipo(_equipoBlanco, Ajedrez::EQUIPO_BLANCO);
 
 	_pantalla->agregar(_tablero);
 }
@@ -33,6 +27,28 @@ Ajedrez::Ciclo::~Ciclo()
 	delete _pantalla;
 	delete _tablero;
 	delete _menu;
+}
+
+void Ajedrez::Ciclo::inicarEquipo(Ajedrez::Equipo* equipo, char color)
+{
+	equipo->setColor(color);
+
+	int posIni = 0;
+	if (color == Ajedrez::EQUIPO_BLANCO)
+		posIni += Ajedrez::CANTIDAD_PIEZAS_EQUIPO;
+
+	int posIniPeon = posIni + Ajedrez::CANTIDAD_PEON;
+
+	int i = posIni;
+	while (i < posIniPeon)
+	{
+		_pieza[i] = new Ajedrez::Peon();
+		_pieza[i]->setEquipo(equipo);
+
+		_tablero->agregarPieza(_pieza[i]);
+
+		i++;
+	}
 }
 
 void Ajedrez::Ciclo::setup()

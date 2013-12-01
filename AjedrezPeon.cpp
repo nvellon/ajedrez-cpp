@@ -11,7 +11,7 @@ Ajedrez::Peon::~Peon()
 
 bool Ajedrez::Peon::getPuedeSaltar()
 {
-	return true;
+	return false;
 }
 
 int Ajedrez::Peon::getTipoPieza()
@@ -21,7 +21,7 @@ int Ajedrez::Peon::getTipoPieza()
 
 char* Ajedrez::Peon::getIcono()
 {
-	char* rutaIcono = new char[50];
+	char* rutaIcono = new char[30];
 
 	Juego::Equipo* equipo = getEquipo();
 
@@ -42,7 +42,15 @@ Ajedrez::coordTablero Ajedrez::Peon::getCoordenadaInicial()
 {
 	Ajedrez::coordTablero coordenada;
 
-	coordenada.fila = 1;
+	Juego::Equipo* equipo = getEquipo();
+
+	if (((Ajedrez::Equipo*)equipo)->getColor() == Ajedrez::EQUIPO_NEGRO)
+		coordenada.fila = 1;
+
+	if (((Ajedrez::Equipo*)equipo)->getColor() == Ajedrez::EQUIPO_BLANCO)
+		coordenada.fila = 6;
+
+	cout << coordenada.fila << endl;
 	coordenada.columna = 0;
 
 	return coordenada;

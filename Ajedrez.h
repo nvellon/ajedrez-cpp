@@ -56,6 +56,8 @@ protected:
 	Ajedrez::Equipo* _equipoBlanco;
 	Ajedrez::Pieza* _pieza[Ajedrez::CANTIDAD_PIEZAS_EQUIPO * 2];
 
+	void inicarEquipo(Ajedrez::Equipo* equipo, char color);
+
 	void setup();
 	void ingresoJugador();
 	void actualizarJuego();
