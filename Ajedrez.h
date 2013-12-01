@@ -16,6 +16,18 @@ namespace Ajedrez
 	const char EQUIPO_NEGRO = 'n';
 	const char EQUIPO_BLANCO = 'b';
 
+	typedef struct coordPantalla
+	{
+		int x;
+		int y;
+	} coordPantalla;
+
+	typedef struct coordTablero
+	{
+		int fila;
+		int columna;
+	} coordTablero;
+
 	class Ciclo;
 	class Tablero;
 	class Casillero;
@@ -62,23 +74,48 @@ public:
 class Ajedrez::Tablero:public Grafica::Composicion
 {
 protected:
+	Grafica::Imagen* _grilla;
+	Ajedrez::Casillero* _casillero[Ajedrez::CANTIDAD_PIEZAS_EQUIPO][Ajedrez::CANTIDAD_PIEZAS_EQUIPO];
+
 	void crearGrilla();
 	void dibujarRotulos();
+	void crearCasilleros();
 
 public:
 	static const int CELDAS_POR_LADO = 8;
 	static const int SEPARACION_TABLERO_ROTULO_ANCHO = 15;
 	static const int SEPARACION_TABLERO_ROTULO_ALTO = 20;
-	static const int GRILLA_IMAGEN_ANCHO = 500;
-	static const int GRILLA_IMAGEN_ALTO = 500;
-	static const int GRILLA_IMAGEN_ANCHO_CELDA = 62;
-	static const int GRILLA_IMAGEN_ALTO_CELDA = 62;
+	static const int GRILLA_IMAGEN_ANCHO = 480;
+	static const int GRILLA_IMAGEN_ALTO = 480;
+	static const int GRILLA_IMAGEN_ANCHO_CELDA = 60;
+	static const int GRILLA_IMAGEN_ALTO_CELDA = 60;
 	static const int PORCENTAJE_TAMANO_PIEZA_CELDA = 80;
-
-	Grafica::Imagen* _grilla;
 
 	Tablero(int x, int y);
 	~Tablero();
+	void agregarPieza(Ajedrez::Pieza* pieza);
+	void dibujar();
+};
+
+/**
+ * Ajedrez::Casillero
+ */
+class Ajedrez::Casillero
+{
+protected:
+	Ajedrez::coordTablero _coordenada;
+	Ajedrez::coordPantalla _puntoInicialTablero;
+	Ajedrez::Pieza* _pieza;
+	Ajedrez::coordPantalla _puntoInicial;
+	Ajedrez::coordPantalla _puntoFinal;
+
+public:
+	Casillero(Ajedrez::coordTablero coordenada, Ajedrez::coordPantalla puntoInicialTablero);
+	~Casillero();
+	void setPieza(Ajedrez::Pieza* pieza);
+	Ajedrez::Pieza* getPieza();
+	void calcularCoordenadas();
+	bool puntoEnArea(Ajedrez::coordPantalla punto);
 	void dibujar();
 };
 
@@ -125,9 +162,17 @@ protected:
 	bool _puedeSaltar;
 
 public:
+	static const int PEON = 0;
+	static const int TORRE = 1;
+	static const int CABALLO = 2;
+	static const int ALFIL = 3;
+	static const int REINA = 4;
+	static const int REY = 5;
+
 	Pieza();
 	~Pieza();
 	virtual bool getPuedeSaltar()=0;
+	virtual Ajedrez::coordTablero getCoordenadaInicial()=0;
 };
 
 /**
@@ -143,8 +188,9 @@ public:
 	~Peon();
 	char* getIcono();
 	bool getPuedeSaltar();
-	char getTipoPieza();
+	int getTipoPieza();
 	void mover();
 	bool movimientoValido();
+	Ajedrez::coordTablero getCoordenadaInicial();
 	void dibujar();
 };

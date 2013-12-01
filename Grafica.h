@@ -99,7 +99,9 @@ public:
 	void setRutaImagen(char* rutaImagen, int ancho, int alto);
 	char* getRutaImagen();
 	void setAncho(int ancho);
+	int getAncho();
 	void setAlto(int alto);
+	int getAlto();
 	void dibujar();
 };
 

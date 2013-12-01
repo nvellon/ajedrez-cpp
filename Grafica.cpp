@@ -147,9 +147,19 @@ void Grafica::Imagen::setAncho(int ancho)
 	_ancho = ancho;
 }
 
+int Grafica::Imagen::getAncho()
+{
+	return _ancho;
+}
+
 void Grafica::Imagen::setAlto(int alto)
 {
 	_alto = alto;
+}
+
+int Grafica::Imagen::getAlto()
+{
+	return _alto;
 }
 
 void Grafica::Imagen::dibujar()

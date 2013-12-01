@@ -3,33 +3,29 @@
 Ajedrez::Ciclo::Ciclo()
 {
 	_finalizo = false;
+
 	_pantalla = new Grafica::Pantalla("Ajedrez - Grupo 6", 800, 600);
-	
-	_tablero = new Ajedrez::Tablero(30, 20);
-	_pantalla->agregar(_tablero);
 
 	_menu = new Ajedrez::Menu(580, 0);
 	_pantalla->agregar(_menu);
+	
+	_tablero = new Ajedrez::Tablero(30, 40);
 
 	_equipoNegro = new Ajedrez::Equipo("Negras");
 	_equipoNegro->setColor(Ajedrez::EQUIPO_NEGRO);
-
-	int x = 50;
 
 	for (int i = 0; i < Ajedrez::CANTIDAD_PEON; i++)
 	{
 		_pieza[i] = new Ajedrez::Peon();
 		_pieza[i]->setEquipo(_equipoNegro);
-		_pieza[i]->setX(x);
-		_pieza[i]->setY(110);
 
-		x += Ajedrez::Tablero::GRILLA_IMAGEN_ANCHO_CELDA;
-
-		_pantalla->agregar(_pieza[i]);
+		_tablero->agregarPieza(_pieza[i]);
 	}
 
 	_equipoBlanco = new Ajedrez::Equipo("Blancas");
 	_equipoBlanco->setColor(Ajedrez::EQUIPO_BLANCO);
+
+	_pantalla->agregar(_tablero);
 }
 
 Ajedrez::Ciclo::~Ciclo()

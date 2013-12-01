@@ -49,7 +49,7 @@ public:
 	void setEquipo(Juego::Equipo* equipo);
 	Juego::Equipo* getEquipo();
 	virtual char* getIcono()=0;
-	virtual char getTipoPieza()=0;
+	virtual int getTipoPieza()=0;
 	virtual void mover()=0;
 	virtual bool movimientoValido()=0;
 };
