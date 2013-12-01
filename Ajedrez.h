@@ -196,3 +196,103 @@ public:
 	Ajedrez::coordTablero getCoordenadaInicial();
 	void dibujar();
 };
+
+/**
+ * Ajedrez::Torre
+ */
+class Ajedrez::Torre:public Ajedrez::Pieza
+{
+protected:
+	//
+
+public:
+	Torre();
+	~Torre();
+	char* getIcono();
+	bool getPuedeSaltar();
+	int getTipoPieza();
+	void mover();
+	bool movimientoValido();
+	Ajedrez::coordTablero getCoordenadaInicial();
+	void dibujar();
+};
+
+/**
+ * Ajedrez::Caballo
+ */
+class Ajedrez::Caballo:public Ajedrez::Pieza
+{
+protected:
+	//
+
+public:
+	Caballo();
+	~Caballo();
+	char* getIcono();
+	bool getPuedeSaltar();
+	int getTipoPieza();
+	void mover();
+	bool movimientoValido();
+	Ajedrez::coordTablero getCoordenadaInicial();
+	void dibujar();
+};
+
+/**
+ * Ajedrez::Alfil
+ */
+class Ajedrez::Alfil:public Ajedrez::Pieza
+{
+protected:
+	//
+
+public:
+	Alfil();
+	~Alfil();
+	char* getIcono();
+	bool getPuedeSaltar();
+	int getTipoPieza();
+	void mover();
+	bool movimientoValido();
+	Ajedrez::coordTablero getCoordenadaInicial();
+	void dibujar();
+};
+
+/**
+ * Ajedrez::Reina
+ */
+class Ajedrez::Reina:public Ajedrez::Pieza
+{
+protected:
+	//
+
+public:
+	Reina();
+	~Reina();
+	char* getIcono();
+	bool getPuedeSaltar();
+	int getTipoPieza();
+	void mover();
+	bool movimientoValido();
+	Ajedrez::coordTablero getCoordenadaInicial();
+	void dibujar();
+};
+
+/**
+ * Ajedrez::Rey
+ */
+class Ajedrez::Rey:public Ajedrez::Pieza
+{
+protected:
+	//
+
+public:
+	Rey();
+	~Rey();
+	char* getIcono();
+	bool getPuedeSaltar();
+	int getTipoPieza();
+	void mover();
+	bool movimientoValido();
+	Ajedrez::coordTablero getCoordenadaInicial();
+	void dibujar();
+};

@@ -85,7 +85,26 @@ void Ajedrez::Tablero::agregarPieza(Ajedrez::Pieza* pieza)
 	int j = coordenada.columna;
 
 	while (j < Ajedrez::Tablero::CELDAS_POR_LADO && _casillero[coordenada.fila][j]->getPieza() != NULL)
-		j++;
+	{
+		switch (pieza->getTipoPieza())
+		{
+		case Ajedrez::Pieza::REY:
+		case Ajedrez::Pieza::REINA:
+			break;
+		case Ajedrez::Pieza::ALFIL:
+			j += 3;
+			break;
+		case Ajedrez::Pieza::CABALLO:
+			j += 5;
+			break;
+		case Ajedrez::Pieza::TORRE:
+			j += 7;
+			break;
+		case Ajedrez::Pieza::PEON:
+			j += 1;
+			break;
+		}
+	}
 
 	if (j < Ajedrez::Tablero::CELDAS_POR_LADO)
 		_casillero[coordenada.fila][j]->setPieza(pieza);

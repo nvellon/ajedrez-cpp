@@ -37,10 +37,11 @@ void Ajedrez::Ciclo::inicarEquipo(Ajedrez::Equipo* equipo, char color)
 	if (color == Ajedrez::EQUIPO_BLANCO)
 		posIni += Ajedrez::CANTIDAD_PIEZAS_EQUIPO;
 
-	int posIniPeon = posIni + Ajedrez::CANTIDAD_PEON;
+	// Peones
+	int posFinPeon = posIni + Ajedrez::CANTIDAD_PEON;
 
 	int i = posIni;
-	while (i < posIniPeon)
+	while (i < posFinPeon)
 	{
 		_pieza[i] = new Ajedrez::Peon();
 		_pieza[i]->setEquipo(equipo);
@@ -49,6 +50,61 @@ void Ajedrez::Ciclo::inicarEquipo(Ajedrez::Equipo* equipo, char color)
 
 		i++;
 	}
+
+	// Torres
+	int posFinTorre = posFinPeon + Ajedrez::CANTIDAD_TORRE;
+
+	while (i < posFinTorre)
+	{
+		_pieza[i] = new Ajedrez::Torre();
+		_pieza[i]->setEquipo(equipo);
+
+		_tablero->agregarPieza(_pieza[i]);
+
+		i++;
+	}
+
+	// Caballos
+	int posFinCaballo = posFinTorre + Ajedrez::CANTIDAD_CABALLO;
+
+	while (i < posFinCaballo)
+	{
+		_pieza[i] = new Ajedrez::Caballo();
+		_pieza[i]->setEquipo(equipo);
+
+		_tablero->agregarPieza(_pieza[i]);
+
+		i++;
+	}
+
+	// Alfiles
+	int posFinAlfil = posFinCaballo + Ajedrez::CANTIDAD_ALFIL;
+
+	while (i < posFinAlfil)
+	{
+		_pieza[i] = new Ajedrez::Alfil();
+		_pieza[i]->setEquipo(equipo);
+
+		_tablero->agregarPieza(_pieza[i]);
+
+		i++;
+	}
+
+	// Reina
+	_pieza[i] = new Ajedrez::Reina();
+	_pieza[i]->setEquipo(equipo);
+
+	_tablero->agregarPieza(_pieza[i]);
+
+	i++;
+
+	// Rey
+	_pieza[i] = new Ajedrez::Rey();
+	_pieza[i]->setEquipo(equipo);
+
+	_tablero->agregarPieza(_pieza[i]);
+
+	i++;
 }
 
 void Ajedrez::Ciclo::setup()
