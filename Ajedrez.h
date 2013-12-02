@@ -49,12 +49,14 @@ class Ajedrez::Ciclo:public Juego::Ciclo
 {
 protected:
 	bool _finalizo;
+	Grafica::ManejadorClick* _manejadorClick;
 	Grafica::Pantalla* _pantalla;
 	Ajedrez::Tablero* _tablero;
 	Ajedrez::Menu* _menu;
 	Ajedrez::Equipo* _equipoNegro;
 	Ajedrez::Equipo* _equipoBlanco;
 	Ajedrez::Pieza* _pieza[Ajedrez::CANTIDAD_PIEZAS_EQUIPO * 2];
+	vector<Grafica::Dibujable*> _objetosRedibujar;
 
 	void inicarEquipo(Ajedrez::Equipo* equipo, char color);
 
@@ -78,6 +80,8 @@ class Ajedrez::Tablero:public Grafica::Composicion
 protected:
 	Grafica::Imagen* _grilla;
 	Ajedrez::Casillero* _casillero[Ajedrez::CANTIDAD_PIEZAS_EQUIPO][Ajedrez::CANTIDAD_PIEZAS_EQUIPO];
+	Ajedrez::Casillero* _casilleroActual;
+	Ajedrez::Casillero* _casilleroAnterior;
 
 	void crearGrilla();
 	void dibujarRotulos();
@@ -97,12 +101,17 @@ public:
 	~Tablero();
 	void agregarPieza(Ajedrez::Pieza* pieza);
 	void dibujar();
+	void notificar(int x, int y, int tipo);
+	void setCasilleroActual(Ajedrez::Casillero* casillero);
+	Ajedrez::Casillero* getCasilleroActual();
+	void setCasilleroAnterior(Ajedrez::Casillero* casillero);
+	Ajedrez::Casillero* getCasilleroAnterior();
 };
 
 /**
  * Ajedrez::Casillero
  */
-class Ajedrez::Casillero
+class Ajedrez::Casillero:public Grafica::Dibujable
 {
 protected:
 	Ajedrez::coordTablero _coordenada;
@@ -110,6 +119,7 @@ protected:
 	Ajedrez::Pieza* _pieza;
 	Ajedrez::coordPantalla _puntoInicial;
 	Ajedrez::coordPantalla _puntoFinal;
+	bool _seleccionado;
 
 public:
 	Casillero(Ajedrez::coordTablero coordenada, Ajedrez::coordPantalla puntoInicialTablero);
@@ -119,6 +129,9 @@ public:
 	void calcularCoordenadas();
 	bool puntoEnArea(Ajedrez::coordPantalla punto);
 	void dibujar();
+	void notificar(int x, int y, int tipo);
+	void setSeleccionado(bool seleccionado);
+	bool getSeleccionado();
 };
 
 /**

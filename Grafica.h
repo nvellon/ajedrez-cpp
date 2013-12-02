@@ -4,11 +4,14 @@
 
 using namespace std;
 
+
 /**
  * Grafica Namespace
  */
 namespace Grafica
 {
+	class ManejadorClick;
+	class Clickable;
 	class Dibujable;
 	class Composicion;
 	class Pantalla;
@@ -18,10 +21,40 @@ namespace Grafica
 	class Rectangulo;
 };
 
+
+/**
+ * ManejadorClick
+ */
+class Grafica::ManejadorClick
+{
+protected:
+	vector<Grafica::Clickable*> _observador;
+
+public:
+	ManejadorClick();
+	~ManejadorClick();
+	void agregarObservador(Grafica::Clickable* observador);
+	bool escuchar();
+	void notificar(int x, int y, int tipo);
+};
+
+
+/**
+ * Clickable
+ */
+class Grafica::Clickable
+{
+public:
+	Clickable();
+	~Clickable();
+	virtual void notificar(int x, int y, int tipo)=0;
+};
+
+
 /**
  * Dibujable
  */
-class Grafica::Dibujable
+class Grafica::Dibujable:public Grafica::Clickable
 {
 private:
 	int _x;
@@ -37,6 +70,7 @@ public:
 	virtual void dibujar()=0;
 };
 
+
 /**
  * Composicion
  */
@@ -50,8 +84,10 @@ public:
 	~Composicion();
 	void agregar(Grafica::Dibujable* componente);
 	void vaciar();
+	void notificar(int x, int y, int tipo);
 	void dibujar();
 };
+
 
 /**
  * Pantalla
@@ -66,6 +102,7 @@ private:
 public:
 	Pantalla(char* titulo, int ancho, int alto);
 	void mostrarPosMouse(bool mostrar);
+	void notificar(int x, int y, int tipo);
 	void dibujar();
 };
 
@@ -80,6 +117,7 @@ protected:
 public:
 	Texto(char* texto);
 	~Texto();
+	void notificar(int x, int y, int tipo);
 	void dibujar();
 };
 
@@ -102,6 +140,7 @@ public:
 	int getAncho();
 	void setAlto(int alto);
 	int getAlto();
+	void notificar(int x, int y, int tipo);
 	void dibujar();
 };
 
@@ -116,6 +155,7 @@ private:
 
 public:
 	Linea(int x1, int y1, int x2, int y2);
+	void notificar(int x, int y, int tipo);
 	void dibujar();
 };
 
@@ -138,5 +178,6 @@ public:
 	void setColorRelleno(int color);
 	void setAnchoLinea(int pixels);
 	void set3d(bool enabled);
+	void notificar(int x, int y, int tipo);
 	void dibujar();
 };

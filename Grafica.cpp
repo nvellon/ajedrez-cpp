@@ -1,9 +1,74 @@
-#include "Grafica.h"
+﻿#include "Grafica.h"
+
+
+/**
+ * ManejadorClick
+ */
+Grafica::ManejadorClick::ManejadorClick()
+{}
+
+Grafica::ManejadorClick::~ManejadorClick()
+{}
+
+void Grafica::ManejadorClick::agregarObservador(Grafica::Clickable* observador)
+{
+	_observador.push_back(observador);
+}
+
+bool Grafica::ManejadorClick::escuchar()
+{
+	if (ismouseclick( WM_LBUTTONDOWN )) 
+	{ // Esto chequea si el boton izquierdo del mouse fue presionado.
+		
+		notificar(mousex(), mousey(), WM_LBUTTONDOWN);
+
+		clearmouseclick(WM_LBUTTONDOWN); // Limpiamos el evento.
+
+		return true;
+	}
+	else if (ismouseclick( WM_RBUTTONDBLCLK )) 
+	{ // Esto chequea si el boton derecho del mouse hizo doble click.
+		
+		notificar(mousex(), mousey(), WM_RBUTTONDBLCLK);
+
+		clearmouseclick(WM_RBUTTONDBLCLK); // Limpiamos el evento.
+
+		return true;
+	}
+	else if (ismouseclick( WM_MBUTTONUP )) 
+	{ // Esto chequea si el boton del medio fue soltado.
+		
+		notificar(mousex(), mousey(), WM_MBUTTONUP);
+
+		clearmouseclick(WM_MBUTTONUP);  // Limpiamos el evento.
+
+		return true;
+	}
+
+	return false;
+}
+
+void Grafica::ManejadorClick::notificar(int x, int y, int tipo)
+{
+	for (int i = 0; i < _observador.size(); i++)
+		_observador[i]->notificar(x, y, tipo);
+}
+
+
+/**
+ * Clickable
+ */
+Grafica::Clickable::Clickable()
+{}
+
+Grafica::Clickable::~Clickable()
+{}
+
 
 /**
  * Dibujable
  */
-Grafica::Dibujable::Dibujable()
+Grafica::Dibujable::Dibujable():Grafica::Clickable()
 {
 	_x = 0;
 	_y = 0;
@@ -34,6 +99,7 @@ int Grafica::Dibujable::getY()
 	return _y;
 };
 
+
 /**
  * Composicion
  */
@@ -60,11 +126,18 @@ void Grafica::Composicion::vaciar()
 	_componente.erase(_componente.begin(), _componente.end());
 };
 
+void Grafica::Composicion::notificar(int x, int y, int tipo)
+{
+	for (int i = 0; i < _componente.size(); i++)
+		_componente[i]->notificar(x, y, tipo);
+}
+
 void Grafica::Composicion::dibujar()
 {
 	for (int i = 0; i < _componente.size(); i++)
 		_componente[i]->dibujar();
 };
+
 
 /**
  * Pantalla
@@ -78,7 +151,8 @@ Grafica::Pantalla::Pantalla(char* titulo, int ancho, int alto):Grafica::Composic
 
 void Grafica::Pantalla::mostrarPosMouse(bool mostrar) 
 {
-	if (mostrar) {
+	if (mostrar) 
+	{
 		char buffer[20] = "";
 
 		setcolor(15);
@@ -92,12 +166,22 @@ void Grafica::Pantalla::mostrarPosMouse(bool mostrar)
 	}
 }
 
+void Grafica::Pantalla::notificar(int x, int y, int tipo)
+{
+	if (x >= getX() && y >= getY() && x <= getX() + _ancho && y <= getY() + _alto)
+	{
+		//
+	}
+}
+
 void Grafica::Pantalla::dibujar()
 {
-	initwindow(_ancho, _alto, _titulo);
+	if (getcurrentwindow() < 0)
+		initwindow(_ancho, _alto, _titulo);
 
 	Grafica::Composicion::dibujar();
 }
+
 
 /**
  * texto
@@ -112,10 +196,14 @@ Grafica::Texto::~Texto()
 	delete[] _texto;
 }
 
+void Grafica::Texto::notificar(int x, int y, int tipo)
+{}
+
 void Grafica::Texto::dibujar()
 {
 	outtextxy(getX(), getY(), _texto);
 };
+
 
 /**
  * Imagen
@@ -162,10 +250,19 @@ int Grafica::Imagen::getAlto()
 	return _alto;
 }
 
+void Grafica::Imagen::notificar(int x, int y, int tipo)
+{
+	if (x >= getX() && y >= getY() && x <= getX() + _ancho && y <= getY() + _alto)
+	{
+		//
+	}
+}
+
 void Grafica::Imagen::dibujar()
 {
 	readimagefile(_rutaImagen, getX(), getY(), getX() + _ancho, getY() + _alto);
 };
+
 
 /**
  * Linea
@@ -178,10 +275,14 @@ Grafica::Linea::Linea(int x1, int y1, int x2, int y2)
 	_y2 = y2;
 };
 
+void Grafica::Linea::notificar(int x, int y, int tipo)
+{}
+
 void Grafica::Linea::dibujar()
 {
 	line(getX(), getY(), _x2, _y2);
 };
+
 
 /**
  * Rectangulo
@@ -218,6 +319,9 @@ void Grafica::Rectangulo::set3d(bool enabled)
 {
 	_3d = enabled;
 }
+
+void Grafica::Rectangulo::notificar(int x, int y, int tipo)
+{}
 
 void Grafica::Rectangulo::dibujar()
 {

@@ -4,22 +4,22 @@ Ajedrez::Ciclo::Ciclo()
 {
 	_finalizo = false;
 
+	_manejadorClick = new Grafica::ManejadorClick();
+
+	// Creo pantalla
 	_pantalla = new Grafica::Pantalla("Ajedrez - Grupo 6", 800, 600);
 
+	// Creo menu
 	_menu = new Ajedrez::Menu(580, 0);
-	_pantalla->agregar(_menu);
-	
+
+	// Creo tablero
 	_tablero = new Ajedrez::Tablero(30, 40);
 
-	// Negras
+	// Equipo Negro
 	_equipoNegro = new Ajedrez::Equipo("Negras");
-	inicarEquipo(_equipoNegro, Ajedrez::EQUIPO_NEGRO);
 
-	// Blancas
+	// Equipo Blanco
 	_equipoBlanco = new Ajedrez::Equipo("Blancas");
-	inicarEquipo(_equipoBlanco, Ajedrez::EQUIPO_BLANCO);
-
-	_pantalla->agregar(_tablero);
 }
 
 Ajedrez::Ciclo::~Ciclo()
@@ -27,6 +27,7 @@ Ajedrez::Ciclo::~Ciclo()
 	delete _pantalla;
 	delete _tablero;
 	delete _menu;
+	delete _manejadorClick;
 }
 
 void Ajedrez::Ciclo::inicarEquipo(Ajedrez::Equipo* equipo, char color)
@@ -109,41 +110,50 @@ void Ajedrez::Ciclo::inicarEquipo(Ajedrez::Equipo* equipo, char color)
 
 void Ajedrez::Ciclo::setup()
 {
-	cout << "Setup" << endl;
+	inicarEquipo(_equipoNegro, Ajedrez::EQUIPO_NEGRO);
+	inicarEquipo(_equipoBlanco, Ajedrez::EQUIPO_BLANCO);
+
+	_pantalla->agregar(_menu);
+	_pantalla->agregar(_tablero);
+
+	_manejadorClick->agregarObservador(_menu);
+	_manejadorClick->agregarObservador(_tablero);
+
+	_pantalla->dibujar();
 }
 
 void Ajedrez::Ciclo::ingresoJugador()
 {
-	_finalizo = true;
+	while (!_manejadorClick->escuchar())
+	{
+		_pantalla->mostrarPosMouse(true);
 
-	cout << "Ingreso Jugador" << endl;
+		delay(100);
+	}
 }
 
 void Ajedrez::Ciclo::actualizarJuego()
 {
-	cout << "Actualizar Juego" << endl;
+	Ajedrez::Casillero* casilleroAnt = _tablero->getCasilleroAnterior();
+	Ajedrez::Casillero* casilleroSel = _tablero->getCasilleroActual();
+
+	if (casilleroAnt->getPieza() != NULL)
+	{
+		casilleroSel->setPieza(casilleroAnt->getPieza());
+		casilleroAnt->setPieza(NULL);
+	}
 }
 
 void Ajedrez::Ciclo::actualizarPantalla()
 {
-	_pantalla->dibujar();
-	cout << "Actualizar Pantalla" << endl;
+	//_pantalla->dibujar();
 }
 
 bool Ajedrez::Ciclo::finalizo()
 {
-	cout << "Finalizo" << endl;
 	return _finalizo;
 }
 
 void Ajedrez::Ciclo::apagado()
 {
-	cout << "Apagado" << endl;
-	
-	while (!kbhit())
-	{
-		delay(100);
-
-		_pantalla->mostrarPosMouse(true);
-	}
 }

@@ -4,7 +4,8 @@ Ajedrez::Casillero::Casillero(Ajedrez::coordTablero coordenada, Ajedrez::coordPa
 {
 	_coordenada = coordenada;
 	_puntoInicialTablero = puntoInicialTablero;
-	_pieza = NULL;
+	//_pieza = NULL;
+	_seleccionado = false;
 	
 	calcularCoordenadas();
 }
@@ -40,15 +41,50 @@ void Ajedrez::Casillero::calcularCoordenadas()
 
 bool Ajedrez::Casillero::puntoEnArea(Ajedrez::coordPantalla punto)
 {
-	return punto.x >= _puntoInicial.x && punto.y >= _puntoInicial.y && punto.x <= _puntoFinal.x && punto.x <= _puntoFinal.y;
+	return (punto.x >= _puntoInicial.x && punto.y >= _puntoInicial.y && punto.x <= _puntoFinal.x && punto.y <= _puntoFinal.y);
 }
 
 void Ajedrez::Casillero::dibujar()
 {
-	setcolor(WHITE);
-	setlinestyle(SOLID_LINE, 0, 1);
-	rectangle(_puntoInicial.x, _puntoInicial.y, _puntoFinal.x, _puntoFinal.y);
+	if (_seleccionado)
+	{
+		setcolor(RED);
+		setlinestyle(SOLID_LINE, 0, 2);
+		rectangle(_puntoInicial.x + 1, _puntoInicial.y + 1, _puntoFinal.x, _puntoFinal.y);
+	}
+	else
+	{
+		/*setcolor(WHITE);
+		setlinestyle(SOLID_LINE, 0, 1);
+		rectangle(_puntoInicial.x, _puntoInicial.y, _puntoFinal.x, _puntoFinal.y);*/
+	}
 
 	if (_pieza != NULL)
 		_pieza->dibujar();
+}
+
+void Ajedrez::Casillero::notificar(int x, int y, int tipo)
+{
+	Ajedrez::coordPantalla punto;
+	punto.x = x;
+	punto.y = y;
+
+	if (puntoEnArea(punto) && !getSeleccionado())
+	{
+		setSeleccionado(true);
+	}
+	else
+	{
+		setSeleccionado(false);
+	}
+}
+
+void Ajedrez::Casillero::setSeleccionado(bool seleccionado)
+{
+	_seleccionado = seleccionado;
+}
+
+bool Ajedrez::Casillero::getSeleccionado()
+{
+	return _seleccionado;
 }

@@ -50,7 +50,6 @@ Ajedrez::coordTablero Ajedrez::Torre::getCoordenadaInicial()
 	if (((Ajedrez::Equipo*)equipo)->getColor() == Ajedrez::EQUIPO_BLANCO)
 		coordenada.fila = 7;
 
-	cout << coordenada.fila << endl;
 	coordenada.columna = 0;
 
 	return coordenada;

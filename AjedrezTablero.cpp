@@ -1,7 +1,11 @@
 #include "Ajedrez.h"
 
+
 Ajedrez::Tablero::Tablero(int x, int y)
 {
+	_casilleroActual = NULL;
+	_casilleroAnterior = NULL;
+
 	setX(x);
 	setY(y);
 
@@ -74,6 +78,8 @@ void Ajedrez::Tablero::crearCasilleros()
 			puntoInicialTablero.y = getY() + Ajedrez::Tablero::SEPARACION_TABLERO_ROTULO_ALTO;
 
 			_casillero[i][j] = new Ajedrez::Casillero(coordenada, puntoInicialTablero);
+
+			agregar(_casillero[i][j]);
 		}
 	}
 }
@@ -88,21 +94,21 @@ void Ajedrez::Tablero::agregarPieza(Ajedrez::Pieza* pieza)
 	{
 		switch (pieza->getTipoPieza())
 		{
-		case Ajedrez::Pieza::REY:
-		case Ajedrez::Pieza::REINA:
-			break;
-		case Ajedrez::Pieza::ALFIL:
-			j += 3;
-			break;
-		case Ajedrez::Pieza::CABALLO:
-			j += 5;
-			break;
-		case Ajedrez::Pieza::TORRE:
-			j += 7;
-			break;
-		case Ajedrez::Pieza::PEON:
-			j += 1;
-			break;
+			case Ajedrez::Pieza::REY:
+			case Ajedrez::Pieza::REINA:
+				break;
+			case Ajedrez::Pieza::ALFIL:
+				j += 3;
+				break;
+			case Ajedrez::Pieza::CABALLO:
+				j += 5;
+				break;
+			case Ajedrez::Pieza::TORRE:
+				j += 7;
+				break;
+			case Ajedrez::Pieza::PEON:
+				j += 1;
+				break;
 		}
 	}
 
@@ -115,12 +121,41 @@ void Ajedrez::Tablero::dibujar()
 	dibujarRotulos();
 
 	Grafica::Composicion::dibujar();
+}
+
+void Ajedrez::Tablero::notificar(int x, int y, int tipo)
+{
+	Grafica::Composicion::notificar(x, y, tipo);
 
 	for (int i = 0; i < Ajedrez::Tablero::CELDAS_POR_LADO; i++)
 	{
 		for (int j = 0; j < Ajedrez::Tablero::CELDAS_POR_LADO; j++)
 		{
-			_casillero[i][j]->dibujar();
+			if (_casillero[i][j]->getSeleccionado())
+			{
+				setCasilleroAnterior(getCasilleroActual());
+				setCasilleroActual(_casillero[i][j]);
+			}
 		}
 	}
+}
+
+void Ajedrez::Tablero::setCasilleroActual(Ajedrez::Casillero* casillero)
+{
+	_casilleroActual = casillero;
+}
+
+Ajedrez::Casillero* Ajedrez::Tablero::getCasilleroActual()
+{
+	return _casilleroActual;
+}
+
+void Ajedrez::Tablero::setCasilleroAnterior(Ajedrez::Casillero* casillero)
+{
+	_casilleroAnterior = casillero;
+}
+
+Ajedrez::Casillero* Ajedrez::Tablero::getCasilleroAnterior()
+{
+	return _casilleroAnterior;
 }
